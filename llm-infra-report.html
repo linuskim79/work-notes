@@ -7,18 +7,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&family=Bebas+Neue&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0a0e1a;
-    --surface: #111827;
-    --surface2: #1a2236;
-    --border: #1e2d45;
-    --accent: #00d4ff;
-    --accent2: #7c3aed;
-    --accent3: #10b981;
-    --warn: #f59e0b;
-    --danger: #ef4444;
-    --text: #e2e8f0;
-    --text-muted: #64748b;
-    --text-dim: #94a3b8;
+    --bg: #f0f4f8;
+    --surface: #ffffff;
+    --surface2: #e8eef5;
+    --border: #c8d6e5;
+    --accent: #0077b6;
+    --accent2: #6d28d9;
+    --accent3: #059669;
+    --warn: #d97706;
+    --danger: #dc2626;
+    --text: #1e293b;
+    --text-muted: #475569;
+    --text-dim: #334155;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -27,7 +27,7 @@
     background: var(--bg);
     color: var(--text);
     font-family: 'Noto Sans KR', sans-serif;
-    font-size: 15px;
+    font-size: 17px;
     line-height: 1.7;
     overflow-x: hidden;
   }
@@ -69,7 +69,7 @@
     font-size: clamp(36px, 6vw, 72px);
     letter-spacing: 3px;
     line-height: 1.1;
-    background: linear-gradient(135deg, #fff 0%, var(--accent) 50%, var(--accent2) 100%);
+    background: linear-gradient(135deg, #1e293b 0%, var(--accent) 50%, var(--accent2) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -145,7 +145,7 @@
   .section h2 {
     font-size: 22px;
     font-weight: 700;
-    color: #fff;
+    color: #1e293b;
   }
 
   .section h3 {
@@ -198,14 +198,12 @@
   .card-title {
     font-size: 14px;
     font-weight: 700;
-    color: #fff;
+    color: #1e293b;
     margin-bottom: 8px;
   }
 
   .card-desc {
-    font-size: 13px;
-    color: var(--text-muted);
-    line-height: 1.6;
+    font-size: 15px;
   }
 
   /* Table */
@@ -219,10 +217,7 @@
   table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 13px;
-  }
-
-  thead {
+    font-size: 15px;
     background: var(--surface2);
   }
 
@@ -262,7 +257,7 @@
   /* Code block */
   .code-block {
     background: #0d1117;
-    border: 1px solid var(--border);
+    border: 1px solid #30363d;
     border-radius: 10px;
     padding: 20px 24px;
     margin: 16px 0;
@@ -392,7 +387,7 @@
   .timeline-title {
     font-size: 14px;
     font-weight: 600;
-    color: #fff;
+    color: #1e293b;
     margin-bottom: 4px;
   }
 
@@ -496,7 +491,7 @@
   .spec-val {
     font-size: 16px;
     font-weight: 700;
-    color: #fff;
+    color: #1e293b;
   }
 
   .spec-val.accent { color: var(--accent); }
@@ -739,7 +734,7 @@
             <td>32B</td>
             <td><span class="tag tag-green">✓ 지원</span></td>
             <td><span class="tag tag-green">Sonnet급</span></td>
-            <td><strong style="color:#fff">최종 선택</strong></td>
+            <td><strong style="color:#1e293b">최종 선택</strong></td>
           </tr>
           <tr>
             <td>Qwen3-VL-7B</td>
