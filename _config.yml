@@ -1,3 +1,14 @@
-theme: jekyll-theme-cayman
+theme: jekyll-theme-midnight
 title: Work Notes
 description: 업무 문서 모음
+
+# 아래 중 하나만 골라서 theme: 에 넣기
+
+# theme: jekyll-theme-cayman      # 깔끔한 녹색 헤더, 가장 인기
+# theme: jekyll-theme-minimal     # 심플 흰 배경, 글 중심
+# theme: jekyll-theme-midnight    # 다크 모드, 네이비
+# theme: jekyll-theme-slate       # 다크 사이드바
+# theme: jekyll-theme-hacker      # 완전 다크, 터미널 느낌
+# theme: jekyll-theme-architect   # 파란 사이드바, 문서 느낌
+# theme: jekyll-theme-merlot      # 와인색 헤더
+# theme: jekyll-theme-tactile     # 텍스처 있는 사이드바
