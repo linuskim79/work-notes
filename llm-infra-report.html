@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -627,6 +628,208 @@
   ul { padding-left: 20px; margin: 12px 0; }
   li { color: var(--text-muted); font-size: 14px; margin: 6px 0; }
   li strong { color: var(--text-dim); }
+
+  /* ── 추가: Cloudflare Tunnel 단계별 스텝 카드 ── */
+  .cf-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 28px 0;
+    position: relative;
+  }
+
+  .cf-steps::before {
+    content: '';
+    position: absolute;
+    left: 28px;
+    top: 48px;
+    bottom: 48px;
+    width: 2px;
+    background: linear-gradient(to bottom, rgba(0,212,255,0.4), rgba(124,58,237,0.4));
+  }
+
+  .cf-step {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 24px;
+    margin-bottom: 12px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    position: relative;
+  }
+
+  .cf-step:hover {
+    border-color: rgba(0,212,255,0.35);
+    box-shadow: 0 4px 20px rgba(0,119,182,0.08);
+  }
+
+  .cf-step-num {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    border: 2px solid;
+  }
+
+  .cf-step-num.s1 { background: rgba(0,212,255,0.1);  border-color: rgba(0,212,255,0.4);  color: var(--accent); }
+  .cf-step-num.s2 { background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.4); color: var(--accent3); }
+  .cf-step-num.s3 { background: rgba(124,58,237,0.1); border-color: rgba(124,58,237,0.4); color: #a78bfa; }
+  .cf-step-num.s4 { background: rgba(245,158,11,0.1); border-color: rgba(245,158,11,0.4); color: var(--warn); }
+
+  .cf-step-body { flex: 1; }
+
+  .cf-step-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .cf-step-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 400;
+  }
+
+  .cf-step-desc {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+
+  .cf-step-desc code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    background: rgba(0,212,255,0.08);
+    color: var(--accent);
+    padding: 1px 6px;
+    border-radius: 4px;
+    border: 1px solid rgba(0,212,255,0.15);
+  }
+
+  /* 보안 비교 테이블용 강조 행 */
+  .compare-win td:last-child { color: var(--accent3); font-weight: 600; }
+
+  /* VPN vs CF 비교 */
+  .vs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 20px 0;
+  }
+
+  @media (max-width: 600px) {
+    .vs-grid { grid-template-columns: 1fr; }
+    .cf-steps::before { display: none; }
+  }
+
+  .vs-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+
+  .vs-card.bad  { border-top: 3px solid rgba(245,158,11,0.6); }
+  .vs-card.good { border-top: 3px solid rgba(16,185,129,0.6); }
+
+  .vs-card-title {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .vs-card.bad  .vs-card-title { color: var(--warn); }
+  .vs-card.good .vs-card-title { color: var(--accent3); }
+
+  .vs-item {
+    font-size: 13px;
+    color: var(--text-muted);
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(200,214,229,0.4);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .vs-item:last-child { border-bottom: none; }
+  .vs-item::before { flex-shrink: 0; margin-top: 2px; }
+  .vs-card.bad  .vs-item::before { content: '✗'; color: var(--warn); }
+  .vs-card.good .vs-item::before { content: '✓'; color: var(--accent3); }
+
+  /* 확장 아키텍처 다이어그램 */
+  .arch-section-label {
+    font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 16px 0 6px;
+    text-align: center;
+  }
+
+  .arch-divider {
+    border: none;
+    border-top: 1px dashed var(--border);
+    margin: 12px 40px;
+  }
+
+  .arch-zone {
+    border: 1px dashed;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 8px 0;
+    position: relative;
+  }
+
+  .arch-zone.external {
+    border-color: rgba(0,212,255,0.25);
+    background: rgba(0,212,255,0.03);
+  }
+
+  .arch-zone.cf-edge {
+    border-color: rgba(245,158,11,0.3);
+    background: rgba(245,158,11,0.03);
+  }
+
+  .arch-zone.internal {
+    border-color: rgba(124,58,237,0.25);
+    background: rgba(124,58,237,0.03);
+  }
+
+  .arch-zone-label {
+    position: absolute;
+    top: -10px;
+    left: 16px;
+    font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 1px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .arch-zone.external  .arch-zone-label { background: rgba(0,212,255,0.15);  color: var(--accent);  border: 1px solid rgba(0,212,255,0.2); }
+  .arch-zone.cf-edge   .arch-zone-label { background: rgba(245,158,11,0.15); color: var(--warn);    border: 1px solid rgba(245,158,11,0.2); }
+  .arch-zone.internal  .arch-zone-label { background: rgba(124,58,237,0.15); color: #a78bfa;        border: 1px solid rgba(124,58,237,0.2); }
 </style>
 </head>
 <body>
@@ -868,7 +1071,7 @@
   </div>
 </div>
 
-<!-- 04. 보안 -->
+<!-- 04. 보안 (확장판) -->
 <div class="section" id="security">
   <div class="container">
     <div class="section-header">
@@ -876,45 +1079,170 @@
       <h2>보안 아키텍처 (Cloudflare Zero Trust)</h2>
     </div>
 
-    <p>사내 방화벽의 인바운드 포트를 전혀 열지 않고, Cloudflare Tunnel을 통해 외부에서 안전하게 접근할 수 있도록 구성했습니다.</p>
+    <p>사내 방화벽의 인바운드 포트를 전혀 열지 않고, <strong>Cloudflare Tunnel</strong>을 통해 외부에서 안전하게 접근할 수 있도록 구성했습니다. 특정 LLM API 포트 하나만 격리·노출하는 방식으로 최소 공격 표면을 유지합니다.</p>
 
+    <!-- 전체 아키텍처 다이어그램 -->
+    <h3>전체 트래픽 흐름</h3>
     <div class="arch-diagram">
-      <div class="arch-row">
-        <div class="arch-box highlight">외부 기기<br><small style="color:var(--text-muted);font-size:10px">OpenClaw 에이전트 / 미니PC</small></div>
+
+      <div class="arch-zone external">
+        <span class="arch-zone-label">외부 (인터넷)</span>
+        <div class="arch-row">
+          <div class="arch-box highlight">외부 기기 (미니PC)<br><small style="color:var(--text-muted);font-size:10px">OpenClaw 에이전트 · 퍼블릭 와이파이</small></div>
+        </div>
       </div>
-      <div class="arch-row"><span class="arch-arrow">↓</span></div>
-      <div class="arch-label">HTTPS 암호화 (443)</div>
-      <div class="arch-row">
-        <div class="arch-box secure">qwen.linus-ai.org<br><small style="color:var(--text-muted);font-size:10px">Cloudflare Zero Trust</small></div>
+
+      <div class="arch-row" style="margin:10px 0 2px">
+        <span class="arch-arrow">↓</span>
+        <span style="font-size:11px;color:var(--accent);font-family:'JetBrains Mono',monospace;margin-left:4px">HTTPS 443 · 암호화</span>
       </div>
-      <div class="arch-row"><span class="arch-arrow">↓</span></div>
-      <div class="arch-label">아웃바운드 터널 (방화벽 인바운드 오픈 불필요)</div>
-      <div class="arch-row">
-        <div class="arch-box">GPU 서버 내 cloudflared<br><small style="color:var(--text-muted);font-size:10px">192.168.100.200</small></div>
+
+      <div class="arch-zone cf-edge">
+        <span class="arch-zone-label">Cloudflare Edge</span>
+        <div class="arch-row">
+          <div class="arch-box secure">qwen.linus-ai.org<br><small style="color:var(--text-muted);font-size:10px">Zero Trust Access 정책 검증</small></div>
+        </div>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:8px;font-family:'JetBrains Mono',monospace">
+          ✓ Client ID / Secret 헤더 인증 &nbsp;|&nbsp; ✓ 미승인 요청 전 세계 차단
+        </div>
       </div>
-      <div class="arch-row"><span class="arch-arrow">↓</span></div>
-      <div class="arch-row">
-        <div class="arch-box gpu">vLLM API :8003<br><small style="color:var(--text-muted);font-size:10px">Qwen3-VL-32B-FP8</small></div>
+
+      <div class="arch-row" style="margin:10px 0 2px">
+        <span class="arch-arrow">↓</span>
+        <span style="font-size:11px;color:var(--accent3);font-family:'JetBrains Mono',monospace;margin-left:4px">아웃바운드 터널 (인바운드 포트 불필요)</span>
+      </div>
+
+      <div class="arch-zone internal">
+        <span class="arch-zone-label">사내 내부망</span>
+        <div class="arch-row">
+          <div class="arch-box">GPU 서버 내 <code style="font-size:11px;color:var(--accent)">cloudflared</code> 데몬<br><small style="color:var(--text-muted);font-size:10px">192.168.100.200</small></div>
+        </div>
+        <div class="arch-row"><span class="arch-arrow" style="font-size:14px">↓</span></div>
+        <div class="arch-row">
+          <div class="arch-box gpu">vLLM API :8003<br><small style="color:var(--text-muted);font-size:10px">Qwen3-VL-32B-FP8</small></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Step-by-step 구축 과정 -->
+    <h3>구축 단계별 상세 설명</h3>
+    <div class="cf-steps">
+
+      <div class="cf-step">
+        <div class="cf-step-num s1">S1</div>
+        <div class="cf-step-body">
+          <div class="cf-step-title">
+            내부망 설정 — cloudflared 데몬 설치 및 도메인 매핑
+            <span class="cf-step-badge tag tag-blue">내부 작업</span>
+          </div>
+          <div class="cf-step-desc">
+            사내 GPU 서버에 Cloudflare Connector 데몬(<code>cloudflared</code>)을 설치합니다.
+            로컬 LLM API 포트(<code>:8003</code>)를 개인 소유 도메인의 서브도메인(<code>qwen.linus-ai.org</code>)과 터널로 매핑합니다.
+            이 단계에서 사내 방화벽 설정은 전혀 변경하지 않습니다.
+          </div>
+        </div>
+      </div>
+
+      <div class="cf-step">
+        <div class="cf-step-num s2">S2</div>
+        <div class="cf-step-body">
+          <div class="cf-step-title">
+            아웃바운드 터널 개설 — 방화벽 인바운드 오픈 불필요
+            <span class="cf-step-badge tag tag-green">핵심 원리</span>
+          </div>
+          <div class="cf-step-desc">
+            GPU 서버의 <code>cloudflared</code>가 <strong>사내 방화벽을 거쳐 Cloudflare 에지 서버로 먼저 아웃바운드 연결(443 HTTPS)</strong>을 개설합니다.
+            이 터널은 서버 측에서 바깥으로 나가는 연결이므로, 외부에서 사내로 들어오는 인바운드 포트를 단 하나도 열 필요가 없습니다.
+            외부 요청은 이 이미 개설된 터널을 역방향으로 통해 내부로 전달됩니다.
+          </div>
+        </div>
+      </div>
+
+      <div class="cf-step">
+        <div class="cf-step-num s3">S3</div>
+        <div class="cf-step-body">
+          <div class="cf-step-title">
+            Zero Trust 보안 정책 적용 — Cloudflare Access
+            <span class="cf-step-badge tag tag-purple">보안 레이어</span>
+          </div>
+          <div class="cf-step-desc">
+            외부 주소(<code>qwen.linus-ai.org</code>)에 <strong>Cloudflare Access 보안 정책</strong>을 적용합니다.
+            사내 이메일 OTP 인증 등 사전 허가된 사용자와, 승인된 API 클라이언트(Client ID / Secret 헤더 인증) 외에는
+            <strong>전 세계 그 누구도 해당 URL에 접근할 수 없도록 원천 차단</strong>합니다.
+            Cloudflare 에지에서 인증이 실패한 요청은 GPU 서버까지 도달 자체를 하지 못합니다.
+          </div>
+        </div>
+      </div>
+
+      <div class="cf-step">
+        <div class="cf-step-num s4">S4</div>
+        <div class="cf-step-body">
+          <div class="cf-step-title">
+            에이전트 연동 — 외부 HTTPS를 통한 안전한 LLM 호출
+            <span class="cf-step-badge tag tag-warn">운영 단계</span>
+          </div>
+          <div class="cf-step-desc">
+            퍼블릭 와이파이에 연결된 미니 PC(OpenClaw 에이전트)는 <strong>안전하게 암호화된 외부 HTTPS 주소</strong>를 통해
+            사내 GPU 서버의 LLM을 호출합니다. 에이전트 입장에서는 일반 OpenAI 호환 API를 쓰는 것과 동일하며,
+            모든 트래픽은 TLS로 암호화되어 전송됩니다.
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- VPN vs Cloudflare Tunnel 비교 -->
+    <h3>VPN 대비 Cloudflare Tunnel의 보안 우위</h3>
+    <p>기존에 검토했던 Tailscale 등의 VPN 방식과 비교하면, Cloudflare Tunnel은 <strong>최소 권한 원칙</strong> 측면에서 구조적으로 더 안전합니다.</p>
+
+    <div class="vs-grid">
+      <div class="vs-card bad">
+        <div class="vs-card-title">⚠️ VPN (Tailscale 등)</div>
+        <div class="vs-item">L3 네트워크 전체를 외부 기기와 연결</div>
+        <div class="vs-item">외부 기기가 사내 내부망 전체에 접근 가능한 구조</div>
+        <div class="vs-item">기기 탈취 시 내부망 전체가 위협에 노출</div>
+        <div class="vs-item">접근 가능한 서비스를 애플리케이션 레벨에서 별도 제한 필요</div>
+      </div>
+      <div class="vs-card good">
+        <div class="vs-card-title">✅ Cloudflare Tunnel</div>
+        <div class="vs-item">지정한 API 포트 하나만 외부로 격리 노출</div>
+        <div class="vs-item">외부 기기는 LLM API 이외의 사내 시스템에 물리적으로 접근 불가</div>
+        <div class="vs-item">기기 탈취 시에도 횡적 이동(Lateral Movement) 원천 차단</div>
+        <div class="vs-item">Cloudflare Access에서 요청 단위로 인증 검증</div>
       </div>
     </div>
 
+    <!-- 보안 장점 카드 -->
+    <h3>인프라/보안 담당자 관점의 주요 장점</h3>
     <div class="card-grid">
       <div class="card">
         <div class="card-icon">🛡️</div>
-        <div class="card-title">인바운드 완전 차단</div>
+        <div class="card-title">인바운드 완전 차단 유지</div>
         <div class="card-desc">외부에서 사내로 들어오는 포트를 단 하나도 열 필요 없음. 포트 스캔 및 외부 공격 원천 차단.</div>
       </div>
       <div class="card">
         <div class="card-icon">🔐</div>
         <div class="card-title">Zero Trust 접근 제어</div>
-        <div class="card-desc">Cloudflare Access로 승인된 크레덴셜(헤더 인증 토큰)을 가진 요청만 통과 허용.</div>
+        <div class="card-desc">Cloudflare Access로 승인된 크레덴셜(헤더 인증 토큰)을 가진 요청만 통과. 미승인 요청은 GPU 서버에 도달 자체가 불가.</div>
       </div>
       <div class="card">
         <div class="card-icon">🚧</div>
-        <div class="card-title">횡적 이동 불가</div>
-        <div class="card-desc">LLM API 포트 하나만 노출. 외부 기기가 해킹당해도 사내 내부망 다른 시스템으로 확산 불가.</div>
+        <div class="card-title">횡적 이동 물리적 차단</div>
+        <div class="card-desc">LLM API 포트 하나만 노출. 외부 기기가 해킹당해도 사내 다른 내부망 시스템으로 확산 불가능.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🌐</div>
+        <div class="card-title">전 세계 엣지 차단</div>
+        <div class="card-desc">미승인 트래픽은 Cloudflare 에지 네트워크에서 즉시 차단. GPU 서버 부하 없이 DDoS 등 대용량 공격도 흡수.</div>
       </div>
     </div>
+
+    <div class="alert alert-info">
+      <span class="alert-icon">💡</span>
+      <div>현재 구성에서 내부망(<code style="font-family:'JetBrains Mono',monospace;font-size:12px">192.168.100.200:8003</code>)은 별도 인증 없이 접근 가능합니다. 외부 접속은 Cloudflare Access가 보호하고 있으나, 향후 계획(08)에서 내부망 API Key 인증 추가를 검토 중입니다.</div>
+    </div>
+
   </div>
 </div>
 
