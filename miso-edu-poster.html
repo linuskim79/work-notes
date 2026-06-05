@@ -199,6 +199,34 @@
             margin-top: 2px;
         }
 
+        .webex-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(6, 182, 212, 0.08);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            border-radius: 10px;
+            padding: 10px 16px;
+            margin-top: 12px;
+            width: 100%;
+        }
+
+        .webex-badge .icon {
+            font-size: 20px;
+        }
+
+        .webex-badge .webex-text {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--accent-cyan);
+        }
+
+        .webex-badge .webex-sub {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
         .curriculum-container {
             display: flex;
             flex-direction: column;
@@ -295,6 +323,25 @@
             opacity: 0.95;
         }
 
+        .btn-webex {
+            display: inline-block;
+            background: rgba(6, 182, 212, 0.12);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(6, 182, 212, 0.4);
+            font-weight: 700;
+            font-size: 15px;
+            padding: 14px 28px;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: background 0.2s, transform 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn-webex:hover {
+            background: rgba(6, 182, 212, 0.2);
+            transform: translateY(-1px);
+        }
+
         @media (max-width: 600px) {
             .header, .content-section, .footer {
                 padding: 30px 24px;
@@ -354,6 +401,14 @@
                         <div class="prepare-sub">실습이 포함된 교육입니다. 반드시 개인 PC를 지참해 주세요.</div>
                     </div>
                 </div>
+                <!-- 온라인 참석 안내 배너 -->
+                <div class="webex-badge">
+                    <span class="icon">📡</span>
+                    <div>
+                        <div class="webex-text">온라인 참석 가능 (Webex 중계)</div>
+                        <div class="webex-sub">현장 참석이 어려우신 분들은 Webex를 통해 온라인으로도 참석하실 수 있습니다.</div>
+                    </div>
+                </div>
             </div>
 
             <div class="section-title">교육 커리큘럼</div>
@@ -392,7 +447,7 @@
                 <strong>광동제약 AI센터</strong><br>
                 MISO는 보안의 안전함 위에서 여러분의 시간을 가치 있게 만들어줍니다.
             </div>
-
+            <a href="https://ekdp.webex.com/ekdp/j.php?MTID=mc154b4fabeadb5a60f7d5bce77857a58" target="_blank" class="btn-webex">📡 Webex 온라인 참석하기 →</a>
         </div>
     </div>
 
