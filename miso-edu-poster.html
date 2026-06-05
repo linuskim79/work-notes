@@ -1,0 +1,400 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MISO 사내 AI-RPA 플랫폼 교육 안내</title>
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: #161f32;
+            --text-main: #ffffff;
+            --text-muted: #94a3b8;
+            --accent-green: #10b981;
+            --accent-cyan: #06b6d4;
+            --border-color: #24324d;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .poster-container {
+            width: 100%;
+            max-width: 800px;
+            background: radial-gradient(circle at top right, rgba(6, 182, 212, 0.15), transparent 40%),
+                        radial-gradient(circle at bottom left, rgba(16, 185, 129, 0.1), transparent 40%),
+                        #0e1726;
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+
+        .poster-container::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 20px 20px;
+            pointer-events: none;
+        }
+
+        .header {
+            padding: 60px 50px 40px 50px;
+            position: relative;
+        }
+
+        .badge-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .badge {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-green));
+            color: #000000;
+            font-weight: 700;
+            font-size: 12px;
+            padding: 6px 14px;
+            border-radius: 100px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-main);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        h1 {
+            font-size: 42px;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #ffffff 60%, var(--text-muted));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: var(--accent-cyan);
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        .main-description {
+            font-size: 16px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            max-width: 600px;
+        }
+
+        .content-section {
+            padding: 0 50px 40px 50px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            color: var(--accent-green);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 20px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: var(--border-color);
+        }
+
+        .schedule-card {
+            background: rgba(22, 31, 50, 0.7);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            backdrop-filter: blur(12px);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(6, 182, 212, 0.05);
+        }
+
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        @media (max-width: 600px) {
+            .schedule-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .info-item .label {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .info-item .value {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .info-item .value.highlight {
+            color: var(--accent-cyan);
+            font-size: 22px;
+        }
+
+        /* 준비물 강조 배지 */
+        .prepare-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.35);
+            border-radius: 10px;
+            padding: 10px 16px;
+            margin-top: 16px;
+            width: 100%;
+        }
+
+        .prepare-badge .icon {
+            font-size: 20px;
+        }
+
+        .prepare-badge .prepare-text {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--accent-green);
+        }
+
+        .prepare-badge .prepare-sub {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .curriculum-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 50px;
+        }
+
+        .curriculum-item {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .curriculum-item:hover {
+            transform: translateY(-2px);
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+
+        .step-number {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--accent-green);
+            font-weight: 800;
+            font-size: 14px;
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .curriculum-text h3 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: var(--text-main);
+        }
+
+        .curriculum-text p {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .footer {
+            background: rgba(11, 15, 25, 0.5);
+            padding: 40px 50px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .footer {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        .footer-text {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .footer-text strong {
+            color: var(--text-main);
+        }
+
+        .btn-apply {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-green));
+            color: #000000;
+            font-weight: 700;
+            font-size: 15px;
+            padding: 14px 28px;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: opacity 0.2s, transform 0.2s;
+            box-shadow: 0 4px 20px rgba(6, 182, 212, 0.25);
+            white-space: nowrap;
+        }
+
+        .btn-apply:hover {
+            transform: translateY(-1px);
+            opacity: 0.95;
+        }
+
+        @media (max-width: 600px) {
+            .header, .content-section, .footer {
+                padding: 30px 24px;
+            }
+            h1 {
+                font-size: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="poster-container">
+        <!-- Header Section -->
+        <div class="header">
+            <div class="badge-container">
+                <span class="badge">Platform Training</span>
+                <span class="badge badge-secondary">기초 교육 공지</span>
+            </div>
+            <h1>사내 AI-RPA 플랫폼<br>MISO 기초 교육 안내</h1>
+            <div class="subtitle">"반복은 AI에게, 창의는 여러분에게"</div>
+            <div class="main-description">
+                우리 회사만의 독립형 보안 환경에서 작동하는 AI 자동화 플랫폼 MISO가 정식 오픈 되었습니다!
+                현업 담당자가 직접 업무 비서를 구축하는 AX Playground 환경과 핵심 활용법을 배워 보세요.
+            </div>
+        </div>
+
+        <!-- Content Section -->
+        <div class="content-section">
+            <div class="section-title">일정 및 장소</div>
+            
+            <!-- Schedule Card -->
+            <div class="schedule-card">
+                <div class="schedule-grid">
+                    <div class="info-item">
+                        <div class="label">교육 일시</div>
+                        <div class="value highlight">6월 11일 (목) 09:00 ~ 11:00</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="label">교육 장소</div>
+                        <div class="value">본사 4층 가산홀</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="label">참석 대상</div>
+                        <div class="value">미소 계정 신청자</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="label">준비물</div>
+                        <div class="value">개인 PC (노트북)</div>
+                    </div>
+                </div>
+                <!-- 준비물 강조 배너 -->
+                <div class="prepare-badge">
+                    <span class="icon">💻</span>
+                    <div>
+                        <div class="prepare-text">개인 PC (노트북) 지참 필수</div>
+                        <div class="prepare-sub">실습이 포함된 교육입니다. 반드시 개인 PC를 지참해 주세요.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-title">교육 커리큘럼</div>
+            
+            <!-- Curriculum List -->
+            <div class="curriculum-container">
+                <div class="curriculum-item">
+                    <div class="step-number">01</div>
+                    <div class="curriculum-text">
+                        <h3>MISO 기본 인터페이스 & 핵심 프롬프트 활용법</h3>
+                        <p>효과적인 결과 도출을 위한 프롬프트 작성 팁 및 사내 규정/문서 요약·분석법 실습</p>
+                    </div>
+                </div>
+                
+                <div class="curriculum-item">
+                    <div class="step-number">02</div>
+                    <div class="curriculum-text">
+                        <h3>AX Playground: 업무 챗봇 만들기</h3>
+                        <p>노코드 환경에서 대화하듯 쉽게 나만의 업무 전용 챗봇을 직접 구축하는 실습</p>
+                    </div>
+                </div>
+                
+                <div class="curriculum-item">
+                    <div class="step-number">03</div>
+                    <div class="curriculum-text">
+                        <h3>간단한 워크플로우 작성하기</h3>
+                        <p>반복 업무를 자동화하는 기본 워크플로우를 직접 설계하고 실행해보는 실습</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Section -->
+        <div class="footer">
+            <div class="footer-text">
+                <strong>광동제약 AI센터</strong><br>
+                MISO는 보안의 안전함 위에서 여러분의 시간을 가치 있게 만들어줍니다.
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>
