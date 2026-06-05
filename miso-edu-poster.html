@@ -337,6 +337,33 @@
             white-space: nowrap;
         }
 
+        .footer-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: stretch;
+        }
+
+        .btn-attend {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-green));
+            color: #000000;
+            font-weight: 700;
+            font-size: 15px;
+            padding: 14px 28px;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: opacity 0.2s, transform 0.2s;
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.25);
+            white-space: nowrap;
+            text-align: center;
+        }
+
+        .btn-attend:hover {
+            transform: translateY(-1px);
+            opacity: 0.95;
+        }
+
         .btn-webex:hover {
             background: rgba(6, 182, 212, 0.2);
             transform: translateY(-1px);
@@ -447,7 +474,7 @@
                 <strong>광동제약 AI센터</strong><br>
                 MISO는 보안의 안전함 위에서 여러분의 시간을 가치 있게 만들어줍니다.
             </div>
-            <a href="https://ekdp.webex.com/ekdp/j.php?MTID=mc154b4fabeadb5a60f7d5bce77857a58" target="_blank" class="btn-webex">📡 Webex 온라인 참석하기 →</a>
+            <div class="footer-buttons"><a href="https://forms.gle/woB18eVcVHLZmk9S9" target="_blank" class="btn-attend">✅ 교육 참석 여부 회신하기 →</a><a href="https://ekdp.webex.com/ekdp/j.php?MTID=mc154b4fabeadb5a60f7d5bce77857a58" target="_blank" class="btn-webex">📡 Webex 온라인 참석하기 →</a></div>
         </div>
     </div>
 
