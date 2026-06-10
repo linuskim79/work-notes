@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MISO — AI 전환의 시작</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#08080f;--s1:#0f0f1a;--s2:#161626;--s3:#1e1e32;
+  --acc:#7c6ff7;--acc2:#5dd4b3;--acc3:#f87171;--acc4:#fbbf24;
+  --t1:#f0f0f8;--t2:#a0a0c0;--t3:#5a5a80;
+  --bdr:rgba(120,120,200,0.14);--r:14px;--rs:8px;
+}
+html,body{width:100%;height:100%;overflow:hidden;font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--t1)}
+#deck{width:100vw;height:100vh;position:relative}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .45s ease,transform .45s ease;transform:translateX(60px);overflow:hidden}
+.slide.active{opacity:1;pointer-events:all;transform:translateX(0)}
+.slide.exit{opacity:0;transform:translateX(-60px)}
+.glow-purple::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 55% 45% at 50% 15%,rgba(124,111,247,.18) 0%,transparent 70%);pointer-events:none}
+.glow-teal::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 55% 45% at 50% 15%,rgba(93,212,179,.14) 0%,transparent 70%);pointer-events:none}
+.glow-amber::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 55% 45% at 50% 15%,rgba(251,191,36,.12) 0%,transparent 70%);pointer-events:none}
+.glow-coral::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 55% 45% at 50% 15%,rgba(248,113,113,.12) 0%,transparent 70%);pointer-events:none}
+#topbar{position:fixed;top:0;left:0;right:0;z-index:200;height:52px;background:rgba(8,8,15,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;padding:0 2rem}
+.topbar-logo{font-size:18px;font-weight:700;letter-spacing:.08em;background:linear-gradient(90deg,var(--acc),var(--acc2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+#slide-counter{font-size:14px;color:var(--t2);font-weight:500}
+.content{flex:1;display:flex;flex-direction:column;justify-content:center;padding:76px 7vw 76px;max-width:1120px;width:100%;margin:0 auto;position:relative;z-index:1}
+.content.top{justify-content:flex-start;padding-top:88px}
+#bottomnav{position:fixed;bottom:0;left:0;right:0;z-index:200;height:62px;background:rgba(8,8,15,.9);backdrop-filter:blur(12px);border-top:1px solid var(--bdr);display:flex;align-items:center;justify-content:center;gap:1.5rem}
+.nav-btn{width:44px;height:44px;border-radius:50%;background:var(--s2);border:1px solid var(--bdr);color:var(--t1);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.nav-btn:hover{background:var(--s3);border-color:var(--acc)}
+.nav-btn:disabled{opacity:.3;cursor:default}
+.progress-bar{width:180px;height:3px;background:var(--s3);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--acc),var(--acc2));transition:width .4s ease;border-radius:3px}
+#slide-dots{display:flex;gap:5px;align-items:center}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--s3);border:1px solid var(--bdr);cursor:pointer;transition:all .2s}
+.dot.active{background:var(--acc);border-color:var(--acc);width:22px;border-radius:4px}
+#keyhint{position:fixed;bottom:70px;right:1.5rem;font-size:11px;color:var(--t3);letter-spacing:.05em}
+.eyebrow{font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--acc);margin-bottom:.6rem;font-weight:400}
+.eyebrow.teal{color:var(--acc2)}.eyebrow.amber{color:var(--acc4)}.eyebrow.coral{color:var(--acc3)}
+h1{font-size:clamp(2.6rem,5.5vw,4rem);font-weight:900;line-height:1.1;margin-bottom:1.25rem}
+h2{font-size:clamp(2rem,4vw,2.8rem);font-weight:700;line-height:1.2;margin-bottom:1rem}
+h3{font-size:clamp(1.05rem,2vw,1.3rem);font-weight:600;margin-bottom:.5rem}
+.lead{font-size:clamp(1.05rem,1.8vw,1.25rem);color:var(--t2);line-height:1.75;max-width:700px}
+.lead.center{text-align:center;margin:0 auto}
+p{font-size:clamp(1rem,1.6vw,1.1rem);color:var(--t2);line-height:1.7}
+.grad-text{background:linear-gradient(135deg,var(--acc),var(--acc2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.grad-teal{background:linear-gradient(135deg,var(--acc2),#7df5d5);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.grad-amber{background:linear-gradient(135deg,var(--acc4),#fde68a);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.grad-coral{background:linear-gradient(135deg,var(--acc3),#fca5a5);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.badge{display:inline-block;padding:6px 18px;border-radius:20px;font-size:13px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:1.5rem}
+.badge-purple{background:rgba(124,111,247,.15);border:1px solid rgba(124,111,247,.3);color:#a89ff9}
+.badge-teal{background:rgba(93,212,179,.15);border:1px solid rgba(93,212,179,.3);color:#5dd4b3}
+.badge-amber{background:rgba(251,191,36,.15);border:1px solid rgba(251,191,36,.3);color:#fbbf24}
+.badge-coral{background:rgba(248,113,113,.15);border:1px solid rgba(248,113,113,.3);color:#f87171}
+.card{background:var(--s1);border:1px solid var(--bdr);border-radius:var(--r);padding:1.75rem;transition:border-color .2s}
+.card h3{font-size:1.1rem;font-weight:600;margin-bottom:.55rem;color:var(--t1)}
+.card p{font-size:.98rem;color:var(--t2);line-height:1.65}
+.card-icon{width:48px;height:48px;border-radius:var(--rs);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:1rem}
+.ci-purple{background:rgba(124,111,247,.15)}.ci-teal{background:rgba(93,212,179,.15)}.ci-coral{background:rgba(248,113,113,.15)}.ci-amber{background:rgba(251,191,36,.15)}
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.quote{border-left:3px solid var(--acc);padding:1.25rem 1.5rem 1.25rem 2rem;background:rgba(124,111,247,.07);border-radius:0 var(--rs) var(--rs) 0;margin:1.5rem 0}
+.quote p{font-size:clamp(1rem,2vw,1.25rem);font-style:italic;color:var(--t1);line-height:1.8}
+.quote.teal{border-left-color:var(--acc2);background:rgba(93,212,179,.07)}
+.quote.amber{border-left-color:var(--acc4);background:rgba(251,191,36,.07)}
+.flow{display:flex;align-items:stretch;background:var(--s1);border:1px solid var(--bdr);border-radius:var(--r);overflow:hidden}
+.flow-step{flex:1;padding:1.5rem 1.2rem;text-align:center;border-right:1px solid var(--bdr);position:relative}
+.flow-step:last-child{border-right:none}
+.flow-num{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin-bottom:.4rem}
+.flow-title{font-size:1.02rem;font-weight:600;margin-bottom:.4rem;color:var(--t1)}
+.flow-desc{font-size:.9rem;color:var(--t2);line-height:1.55}
+.flow-arrow{position:absolute;right:-11px;top:50%;transform:translateY(-50%);width:22px;height:22px;background:var(--s2);border:1px solid var(--bdr);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--t3);z-index:2}
+.flow-step:last-child .flow-arrow{display:none}
+.steps{display:flex;flex-direction:column;gap:12px}
+.step{display:flex;gap:1.25rem;align-items:flex-start;background:var(--s1);border:1px solid var(--bdr);border-radius:var(--rs);padding:1.25rem}
+.step-num{flex-shrink:0;width:34px;height:34px;background:var(--s2);border:1px solid rgba(124,111,247,.4);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--acc)}
+.step h4{font-size:1.05rem;font-weight:600;margin-bottom:.35rem;color:var(--t1)}
+.step p{font-size:.95rem;color:var(--t2)}
+.checklist{background:var(--s1);border:1px solid var(--bdr);border-radius:var(--r);overflow:hidden}
+.cl-header{padding:.9rem 1.5rem;background:var(--s2);font-size:.82rem;font-weight:500;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid var(--bdr);display:grid;grid-template-columns:1.4fr 2.2fr 90px;gap:12px}
+.cl-row{padding:1.05rem 1.5rem;display:grid;grid-template-columns:1.4fr 2.2fr 90px;gap:12px;align-items:center;border-bottom:1px solid var(--bdr)}
+.cl-row:last-child{border-bottom:none}
+.cl-row .lbl{font-size:1rem;font-weight:500;color:var(--t1)}
+.cl-row .dsc{font-size:.93rem;color:var(--t2)}
+.pil{display:inline-flex;align-items:center;gap:4px;padding:4px 12px;border-radius:12px;font-size:.8rem;font-weight:500}
+.pil-ok{background:rgba(93,212,179,.15);color:#5dd4b3}
+.pil-warn{background:rgba(251,191,36,.15);color:#fbbf24}
+.tool-card{background:var(--s1);border:1px solid var(--bdr);border-radius:var(--r);padding:1.75rem;text-align:center;transition:all .2s}
+.tool-card h3{font-size:1.02rem;font-weight:600;margin-bottom:.4rem;color:var(--t1)}
+.tool-card p{font-size:.9rem;color:var(--t2);line-height:1.6}
+.tool-icon{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 1rem}
+.mcp-arch{background:var(--s1);border:1px solid var(--bdr);border-radius:var(--r);padding:1.75rem}
+.mcp-lbl{font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin-bottom:.7rem}
+.mcp-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.mcp-box{background:var(--s2);border:1px solid var(--bdr);border-radius:var(--rs);padding:8px 18px;font-size:.92rem;font-weight:500;color:var(--t2)}
+.mcp-box.ai{background:rgba(124,111,247,.15);border-color:rgba(124,111,247,.3);color:#a89ff9}
+.mcp-box.mcp{background:rgba(93,212,179,.15);border-color:rgba(93,212,179,.3);color:#5dd4b3}
+.wf-wrap{background:var(--s1);border:1px solid var(--bdr);border-radius:var(--r);padding:1.75rem;overflow-x:auto}
+.wf-flow{display:flex;align-items:center;gap:0;min-width:max-content}
+.wf-node{background:var(--s2);border:1px solid var(--bdr);border-radius:var(--rs);padding:1.1rem 1.3rem;text-align:center;width:158px}
+.wf-node.trigger{border-color:rgba(93,212,179,.4)}.wf-node.process{border-color:rgba(124,111,247,.4)}.wf-node.logic{border-color:rgba(251,191,36,.4)}.wf-node.output{border-color:rgba(248,113,113,.4)}
+.wn-type{font-size:.73rem;text-transform:uppercase;letter-spacing:.08em;color:var(--t3);margin-bottom:5px}
+.wn-lbl{font-size:1rem;font-weight:600;color:var(--t1)}
+.wf-edge{width:36px;height:1px;background:var(--bdr);flex-shrink:0;position:relative}
+.wf-edge::after{content:'&#9656;';position:absolute;right:-7px;top:-9px;font-size:12px;color:var(--t3)}
+.core-card{background:var(--s1);border:1px solid var(--bdr);border-radius:var(--r);padding:2rem 1.75rem;position:relative;overflow:hidden}
+.core-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px}
+.core-card.k::before{background:linear-gradient(90deg,var(--acc),#9d96fc)}
+.core-card.t::before{background:linear-gradient(90deg,var(--acc2),#7df5d5)}
+.core-card.w::before{background:linear-gradient(90deg,var(--acc4),#fde68a)}
+.core-num{font-size:.76rem;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin-bottom:.4rem}
+.core-lbl{font-size:1.5rem;font-weight:700;margin-bottom:.75rem}
+.core-lbl.k{color:var(--acc)}.core-lbl.t{color:var(--acc2)}.core-lbl.w{color:var(--acc4)}
+.core-card p{font-size:.98rem;color:var(--t2);line-height:1.7}
+.core-meta{display:flex;align-items:center;gap:8px;margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--bdr);font-size:.84rem;color:var(--t3)}
+.journey{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.j-step{background:var(--s1);border:1px solid var(--bdr);border-radius:var(--rs);padding:1.25rem;position:relative}
+.j-step::after{content:'→';position:absolute;right:-18px;top:50%;transform:translateY(-50%);color:var(--t3);font-size:16px}
+.j-step:last-child::after{display:none}
+.j-num{font-size:.73rem;color:var(--t3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem}
+.j-title{font-size:1.05rem;font-weight:600;color:var(--t1);margin-bottom:.3rem}
+.j-desc{font-size:.87rem;color:var(--t2)}
+.ex-card{background:var(--s1);border:1px solid var(--bdr);border-radius:var(--r);padding:1.75rem}
+.ex-tag{display:inline-block;font-size:.73rem;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;border-radius:12px;margin-bottom:1rem}
+.tag-gs{background:rgba(93,212,179,.1);color:#5dd4b3;border:1px solid rgba(93,212,179,.2)}
+.tag-idea{background:rgba(251,191,36,.1);color:#fbbf24;border:1px solid rgba(251,191,36,.2)}
+.ex-card h3{font-size:1.1rem;font-weight:600;margin-bottom:.5rem;color:var(--t1)}
+.ex-card p{font-size:.93rem;color:var(--t2);line-height:1.65}
+.ex-nodes{display:flex;gap:6px;flex-wrap:wrap;margin-top:1rem}
+.en{font-size:.8rem;padding:3px 10px;border-radius:12px;background:var(--s2);color:var(--t2);border:1px solid var(--bdr)}
+.info-box{padding:1.25rem 1.5rem;border-radius:var(--rs);margin-top:1.25rem}
+.info-teal{background:var(--s1);border:1px solid rgba(93,212,179,.25)}
+.info-amber{background:var(--s1);border:1px solid rgba(251,191,36,.25)}
+.info-label{font-size:.82rem;font-weight:600;margin-bottom:.4rem}
+.il-teal{color:var(--acc2)}.il-amber{color:var(--acc4)}
+.info-box p{font-size:.93rem;color:var(--t2)}
+.section-header{margin-bottom:2rem}
+.center{text-align:center}.center .lead{margin:0 auto}
+hr{border:none;border-top:1px solid var(--bdr);margin:1.25rem 0}
+.tp{display:inline-block;font-size:.85rem;padding:5px 14px;border-radius:12px;font-weight:500;background:var(--s2);color:var(--t2);border:1px solid var(--bdr);margin:2px}
+</style>
+</head>
+<body>
+<div id="topbar">
+  <div class="topbar-logo">MISO</div>
+  <div id="slide-counter">1 / 18</div>
+</div>
+<div id="deck">
+
+<!-- SLIDE 01 HERO -->
+<div class="slide active glow-purple" data-idx="0">
+  <div class="content center">
+    <div class="badge badge-purple">Make Innovation Simple &amp; Open</div>
+    <h1>내 일을 직접 해주는<br><span class="grad-text">AI 직원</span>을 만드세요</h1>
+    <p class="lead center">코딩 없이, 보안 걱정 없이.<br>MISO로 시작하는 실무 중심 AX(AI 전환)</p>
+    <div style="margin-top:3rem;display:flex;gap:1.25rem;justify-content:center;flex-wrap:wrap">
+      <div style="background:var(--s1);border:1px solid var(--bdr);border-radius:var(--r);padding:1.5rem 2.25rem;text-align:center;min-width:165px"><div style="font-size:2.2rem;margin-bottom:.5rem">🧠</div><div style="font-size:1rem;font-weight:500;color:var(--t2)">Knowledge</div></div>
+      <div style="background:var(--s1);border:1px solid var(--bdr);border-radius:var(--r);padding:1.5rem 2.25rem;text-align:center;min-width:165px"><div style="font-size:2.2rem;margin-bottom:.5rem">🔧</div><div style="font-size:1rem;font-weight:500;color:var(--t2)">Tools</div></div>
+      <div style="background:var(--s1);border:1px solid var(--bdr);border-radius:var(--r);padding:1.5rem 2.25rem;text-align:center;min-width:165px"><div style="font-size:2.2rem;margin-bottom:.5rem">⚡</div><div style="font-size:1rem;font-weight:500;color:var(--t2)">Workflow</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 02 목차 -->
+<div class="slide glow-purple" data-idx="1">
+  <div class="content">
+    <div class="section-header">
+      <div class="eyebrow">Table of Contents</div>
+      <h2>오늘의 학습 여정</h2>
+      <p class="lead">AI 대리 한 명과 함께 퇴근하는 것이 목표입니다</p>
+    </div>
+    <div class="journey" style="margin-top:1rem">
+      <div class="j-step"><div class="j-num">Session 1</div><div class="j-title" style="color:var(--acc)">MISO 입문</div><div class="j-desc">문제 인식, 플랫폼 소개, 3가지 핵심 노드</div></div>
+      <div class="j-step"><div class="j-num">Session 2-A</div><div class="j-title" style="color:var(--acc2)">Knowledge</div><div class="j-desc">내 데이터를 AI에게 학습시키기</div></div>
+      <div class="j-step"><div class="j-num">Session 2-B</div><div class="j-title" style="color:var(--acc4)">Tools</div><div class="j-desc">AI에게 외부 기능 연결하기</div></div>
+      <div class="j-step"><div class="j-num">Session 3</div><div class="j-title" style="color:var(--acc3)">Workflow</div><div class="j-desc">업무 프로세스 자동화 설계</div></div>
+    </div>
+    <div class="quote" style="margin-top:2.5rem"><p>"오늘 여러분은 <strong>'AI 대리' 한 명</strong>과 함께 퇴근하게 될 것입니다."</p></div>
+  </div>
+</div>
+
+<!-- SLIDE 03 문제 인식 -->
+<div class="slide glow-coral" data-idx="2">
+  <div class="content">
+    <div class="section-header">
+      <div class="eyebrow coral">Session 1 — 문제 인식</div>
+      <h2>AI는 똑똑하다는데,<br>왜 <span class="grad-coral">내 일</span>은 그대로일까?</h2>
+      <p class="lead">ChatGPT는 뛰어나지만, 우리 팀 어제 회의록과 사내 고유 프로세스는 전혀 모릅니다.</p>
+    </div>
+    <div class="grid3">
+      <div class="card"><div class="card-icon ci-purple">🧠</div><h3>비즈니스 맥락 결여</h3><p>일반 AI는 사내 문서와 고유 업무 방식을 전혀 학습하지 않았습니다. 맥락 없는 답변은 실무에서 무쓸모합니다.</p></div>
+      <div class="card"><div class="card-icon ci-coral">🔒</div><h3>보안의 거대한 벽</h3><p>민감한 사내 데이터를 외부 AI에 업로드하는 순간 느껴지는 불안감. 보안 규정이 AI 활용을 가로막습니다.</p></div>
+      <div class="card"><div class="card-icon ci-amber">⚙️</div><h3>기술 진입 장벽</h3><p>"코딩을 배워야 하나?" AI를 쓰고 싶지만 복잡한 설정에서 시작도 못 했던 경험이 있으신가요?</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 04 MISO 소개 -->
+<div class="slide glow-purple" data-idx="3">
+  <div class="content">
+    <div class="section-header">
+      <div class="eyebrow">Session 1 — MISO 소개</div>
+      <h2>안전한 AX 툴킷,<br><span class="grad-text">MISO</span></h2>
+    </div>
+    <div class="grid3">
+      <div class="card"><div class="card-icon ci-teal">🛡️</div><h3>기업용 보안 환경</h3><p>사내 데이터가 외부 AI 학습에 사용되지 않도록 완벽히 격리. 보안 거버넌스를 충족합니다.</p></div>
+      <div class="card"><div class="card-icon ci-purple">🖱️</div><h3>노코드 기반 UI</h3><p>드래그 앤 드롭으로 완성하는 워크플로우. 코딩 없이 직관적인 UI/UX로 누구나 창조자가 됩니다.</p></div>
+      <div class="card"><div class="card-icon ci-amber">🏗️</div><h3>실무 중심 설계</h3><p>실제 업무 프로세스를 그대로 AI 앱으로 구현. GS그룹 혁신조직 52g의 경험이 담겨 있습니다.</p></div>
+    </div>
+    <div class="quote" style="margin-top:2rem"><p>"현장의 문제는 현장을 가장 잘 아는 실무자가 직접 해결해야 합니다.<br><strong>IT 부서의 의뢰가 아닌, 당신의 마우스 클릭으로 시작됩니다.</strong>"</p></div>
+  </div>
+</div>
+
+<!-- SLIDE 05 3가지 핵심 노드 -->
+<div class="slide glow-purple" data-idx="4">
+  <div class="content">
+    <div class="section-header">
+      <div class="eyebrow">Session 1 — 3가지 핵심 노드</div>
+      <h2>단순 채팅을 넘어<br>업무 방식의 <span class="grad-text">패러다임 전환</span></h2>
+    </div>
+    <div class="grid3">
+      <div class="core-card k"><div class="core-num">01 / Knowledge</div><div class="core-lbl k">지식</div><p>잠들어 있던 PDF, 엑셀, 회의록을 업로드하면 AI의 전문 지식이 됩니다. 근거 있는 답변과 출처 추적이 가능합니다.</p><div class="core-meta">🧠 RAG 기반 · 사내 전용 · 출처 제공</div></div>
+      <div class="core-card t"><div class="core-num">02 / Tools</div><div class="core-lbl t">도구</div><p>웹 검색, 코드 실행, 금융 API 등 외부 기능을 연결해 AI가 실제로 '행동'하게 만듭니다.</p><div class="core-meta">🔧 MCP 기반 · 실시간 데이터 · 자율 판단</div></div>
+      <div class="core-card w"><div class="core-num">03 / Workflow</div><div class="core-lbl w">워크플로우</div><p>데이터 수집 → 요약 → 발송까지 복잡한 업무 흐름을 노드 연결만으로 자동화합니다.</p><div class="core-meta">⚡ 노코드 · 드래그앤드롭 · 즉시 배포</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 06 Session 2 타이틀 -->
+<div class="slide glow-teal" data-idx="5">
+  <div class="content center">
+    <div class="badge badge-teal">Session 2 — Knowledge</div>
+    <h1>AI에게<br><span class="grad-teal">전용 참고서</span>를!</h1>
+    <p class="lead center">잠자던 사내 문서가 AI의 기억이 되는 순간.<br>RAG 기술로 근거 있는 답변을 만들어냅니다.</p>
+    <div style="margin-top:2.5rem;display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;font-size:1.05rem">
+      <span style="color:var(--t2)">📄 PDF · Excel · TXT</span>
+      <span style="color:var(--t3)">→</span>
+      <span style="color:var(--acc2)">🧠 AI 기억</span>
+      <span style="color:var(--t3)">→</span>
+      <span style="color:var(--t2)">💬 근거 있는 답변</span>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 07 RAG 원리 -->
+<div class="slide glow-teal" data-idx="6">
+  <div class="content">
+    <div class="section-header">
+      <div class="eyebrow teal">Session 2 — Knowledge</div>
+      <h2>RAG 작동 원리<br><span style="font-size:1.5rem;font-weight:400;color:var(--t2)">검색 증강 생성, 4단계 흐름</span></h2>
+    </div>
+    <div class="flow">
+      <div class="flow-step"><div class="flow-num">01</div><div class="flow-title">문서 업로드</div><div class="flow-desc">PDF · Excel · TXT<br>업무 문서를 등록합니다</div><div class="flow-arrow">›</div></div>
+      <div class="flow-step"><div class="flow-num">02</div><div class="flow-title">청킹(Chunking)</div><div class="flow-desc">단락 단위로 분할하여<br>중첩 처리합니다</div><div class="flow-arrow">›</div></div>
+      <div class="flow-step"><div class="flow-num">03</div><div class="flow-title">임베딩 · 인덱싱</div><div class="flow-desc">의미 벡터로 변환 후<br>벡터DB에 저장합니다</div><div class="flow-arrow">›</div></div>
+      <div class="flow-step"><div class="flow-num">04</div><div class="flow-title">검색 · 답변 생성</div><div class="flow-desc">관련 조각을 조합해<br>근거 있는 응답 반환</div></div>
+    </div>
+    <div class="info-box info-teal" style="margin-top:2rem">
+      <div class="info-label il-teal">🔒 보안 안내</div>
+      <p>MISO에 올린 데이터는 그룹 내부에만 저장되며, 외부 AI 학습에 절대 활용되지 않습니다.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 08 데이터 전처리 -->
+<div class="slide glow-teal" data-idx="7">
+  <div class="content top">
+    <div class="section-header">
+      <div class="eyebrow teal">Session 2 — Knowledge</div>
+      <h2>데이터 전처리 체크리스트</h2>
+      <p class="lead">좋은 입력이 좋은 출력을 만듭니다. <strong style="color:var(--t1)">GIGO</strong> — Garbage In, Garbage Out.</p>
+    </div>
+    <div class="checklist">
+      <div class="cl-header"><span>체크 항목</span><span>설명</span><span>중요도</span></div>
+      <div class="cl-row"><span class="lbl">GIGO 원칙</span><span class="dsc">오타 없고 내용이 정확한 깨끗한 데이터인가?</span><span><div class="pil pil-ok">✓ 필수</div></span></div>
+      <div class="cl-row"><span class="lbl">표(Table) 구조화</span><span class="dsc">복잡한 표는 자연어로 풀어서 설명해야 AI가 이해합니다</span><span><div class="pil pil-warn">주의</div></span></div>
+      <div class="cl-row"><span class="lbl">불필요 요소 제거</span><span class="dsc">머리말·꼬리말·페이지 번호 등 반복 노이즈를 제거</span><span><div class="pil pil-ok">✓ 필수</div></span></div>
+      <div class="cl-row"><span class="lbl">파일 포맷 확인</span><span class="dsc">스캔 이미지 PDF 대신 디지털 텍스트 PDF 사용 권장</span><span><div class="pil pil-warn">권장</div></span></div>
+      <div class="cl-row"><span class="lbl">메타데이터 정리</span><span class="dsc">문서 제목, 날짜, 작성자 정보를 본문에 명시하면 정확도 향상</span><span><div class="pil pil-ok">권장</div></span></div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 09 Knowledge 실습 -->
+<div class="slide glow-teal" data-idx="8">
+  <div class="content">
+    <div class="section-header">
+      <div class="eyebrow teal">Session 2 — Knowledge 실습</div>
+      <h2>지식 생성 4단계</h2>
+      <p class="lead">ekdp.miso.gs 에서 지금 바로 따라해보세요</p>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div><h4>플레이그라운드 진입</h4><p>ekdp.miso.gs 접속 → 상단 메뉴 '지식관리' 클릭</p></div></div>
+      <div class="step"><div class="step-num">2</div><div><h4>지식 추가 및 이름 설정</h4><p>'+ 지식 추가하기' 버튼 → '데이터 업로드' 선택 → 지식 이름 입력</p></div></div>
+      <div class="step"><div class="step-num">3</div><div><h4>파일 업로드</h4><p>업무 매뉴얼 파일을 드래그 앤 드롭으로 업로드 (PDF, Excel, TXT 지원)</p></div></div>
+      <div class="step"><div class="step-num">4</div><div><h4>학습 완료 확인 및 검증</h4><p>저장 후 임베딩 진행 → '학습 완료' 상태 확인 → 질문으로 동작 검증</p></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 10 Tools 타이틀 -->
+<div class="slide glow-amber" data-idx="9">
+  <div class="content center">
+    <div class="badge badge-amber">Session 2 — Tools</div>
+    <h1>AI에게<br><span class="grad-amber">손발</span> 달아주기</h1>
+    <p class="lead center">지식(기억)만으로는 부족합니다.<br>도구를 장착하면 AI가 생각을 넘어 <strong style="color:var(--t1)">실행</strong>합니다.</p>
+    <div style="margin-top:2.5rem;display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;font-size:1.05rem">
+      <span style="color:var(--t2)">🧠 지식 = 기억</span>
+      <span style="color:var(--t3)">+</span>
+      <span style="color:var(--acc4)">🔧 도구 = 행동</span>
+      <span style="color:var(--t3)">=</span>
+      <span style="color:var(--t2)">🤖 자율 실행 에이전트</span>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 11 주요 도구들 -->
+<div class="slide glow-amber" data-idx="10">
+  <div class="content">
+    <div class="section-header">
+      <div class="eyebrow amber">Session 2 — Tools</div>
+      <h2>MISO에서 바로 쓰는 도구들</h2>
+    </div>
+    <div class="grid4">
+      <div class="tool-card"><div class="tool-icon" style="background:rgba(124,111,247,.15)">🔍</div><h3>Web Search</h3><p>실시간 뉴스, 트렌드, 경쟁사 동향 즉시 조회</p></div>
+      <div class="tool-card"><div class="tool-icon" style="background:rgba(93,212,179,.15)">💻</div><h3>Code Interpreter</h3><p>코드 작성·실행, 데이터 분석, 그래프 생성</p></div>
+      <div class="tool-card"><div class="tool-icon" style="background:rgba(251,191,36,.15)">📈</div><h3>Finance API</h3><p>국내외 증시 실시간 시세, 재무제표 호출</p></div>
+      <div class="tool-card"><div class="tool-icon" style="background:rgba(248,113,113,.15)">🔗</div><h3>MCP 커스텀</h3><p>어떤 외부 API나 서비스도 표준 규격으로 연결</p></div>
+    </div>
+    <div class="mcp-arch" style="margin-top:1.5rem">
+      <div class="mcp-lbl">외부 서비스 → MCP 표준 규격 → AI 에이전트</div>
+      <div class="mcp-row">
+        <div class="mcp-box">Web Search</div><div class="mcp-box">Finance API</div><div class="mcp-box">Code Exec</div><div class="mcp-box">사내 DB</div>
+        <span style="font-size:.95rem;color:var(--t3)">→</span>
+        <div class="mcp-box mcp">MCP 표준</div>
+        <span style="font-size:.95rem;color:var(--t3)">→</span>
+        <div class="mcp-box ai">MISO AI Agent</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 12 Tools 실습 -->
+<div class="slide glow-amber" data-idx="11">
+  <div class="content">
+    <div class="section-header">
+      <div class="eyebrow amber">Session 2 — Tools 실습</div>
+      <h2>실시간 시장 분석 에이전트 만들기</h2>
+      <p class="lead">Web Search + Finance API를 장착해 즉시 보고서를 생성합니다.</p>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div><h4>페르소나(시스템 프롬프트) 설정</h4><p>"너는 데이터 기반의 금융 전문가야. 항상 최신 정보와 수치를 바탕으로 분석해줘."</p></div></div>
+      <div class="step"><div class="step-num">2</div><div><h4>도구 장착 — MCP 연결</h4><p>플레이그라운드 → Tool 탭 → Web Search, Finance API (MCP) 활성화</p></div></div>
+      <div class="step"><div class="step-num">3</div><div><h4>실행 테스트</h4><p>"삼성전자 최근 1주일 뉴스를 요약하고, 현재 주가와 함께 간략한 투자 전망 보고서를 써줘."</p></div></div>
+      <div class="step"><div class="step-num">4</div><div><h4>결과 확인 및 앱 배포</h4><p>AI가 도구를 자율 선택·실행하는 과정 확인 → 마음에 들면 즉시 앱으로 배포</p></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 13 Workflow 타이틀 -->
+<div class="slide glow-coral" data-idx="12">
+  <div class="content center">
+    <div class="badge badge-coral">Session 3 — Workflow</div>
+    <h1>노드로 그리는<br><span class="grad-coral">업무 자동화</span></h1>
+    <p class="lead center">지식과 도구를 엮어 목표를 달성하는 업무 흐름.<br>코드 없이, 선 연결만으로 복잡한 프로세스를 구현합니다.</p>
+    <div style="display:flex;gap:1rem;justify-content:center;margin-top:2.5rem;flex-wrap:wrap">
+      <span class="tp" style="font-size:1rem;padding:7px 20px;color:#5dd4b3;background:rgba(93,212,179,.1);border-color:rgba(93,212,179,.25)">Trigger</span>
+      <span style="color:var(--t3);font-size:1.2rem;align-self:center">→</span>
+      <span class="tp" style="font-size:1rem;padding:7px 20px;color:#a89ff9;background:rgba(124,111,247,.1);border-color:rgba(124,111,247,.25)">AI Process</span>
+      <span style="color:var(--t3);font-size:1.2rem;align-self:center">→</span>
+      <span class="tp" style="font-size:1rem;padding:7px 20px;color:#fbbf24;background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.25)">Logic</span>
+      <span style="color:var(--t3);font-size:1.2rem;align-self:center">→</span>
+      <span class="tp" style="font-size:1rem;padding:7px 20px;color:#f87171;background:rgba(248,113,113,.1);border-color:rgba(248,113,113,.25)">Output</span>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 14 워크플로우 개념 -->
+<div class="slide glow-coral" data-idx="13">
+  <div class="content">
+    <div class="section-header">
+      <div class="eyebrow coral">Session 3 — 핵심 개념</div>
+      <h2>워크플로우를 구성하는<br>핵심 블록</h2>
+    </div>
+    <div class="grid3" style="margin-bottom:1.5rem">
+      <div class="card"><div class="card-icon ci-purple">⬡</div><h3>노드 (Node)</h3><p>워크플로우의 최소 단위. 입력, 판단, 실행, 출력이 각각 하나의 노드입니다.</p></div>
+      <div class="card"><div class="card-icon ci-teal">⚡</div><h3>트리거 (Trigger)</h3><p>"언제 시작할까?" — 호출, 스케줄링, 이벤트 등 워크플로우의 시작점.</p></div>
+      <div class="card"><div class="card-icon ci-amber">→</div><h3>연결 (Link)</h3><p>앞 단계 결과값을 뒷 단계에서 불러오는 참조 구조. 데이터가 흘러가는 파이프.</p></div>
+    </div>
+    <div class="grid3">
+      <div class="card"><h3 style="color:var(--acc)">Variable 노드</h3><p>앞 단계 결과를 저장하고 뒷 단계에서 참조하는 변수 노드.</p></div>
+      <div class="card"><h3 style="color:var(--acc2)">If-Else 노드</h3><p>AI 판단에 따라 경로를 분기합니다. 긴급 vs 일반, 예외 처리 등.</p></div>
+      <div class="card"><h3 style="color:var(--acc4)">Loop 노드</h3><p>여러 데이터를 반복 처리. 10개 뉴스를 순차 요약하는 등 배치 작업.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 15 워크플로우 실습 -->
+<div class="slide glow-coral" data-idx="14">
+  <div class="content">
+    <div class="section-header">
+      <div class="eyebrow coral">Session 3 — 워크플로우 실습</div>
+      <h2>식약처 공지 스크래핑 에이전트</h2>
+      <p class="lead">Form → Scraping → AI 요약 → If-Else 분기 → Output</p>
+    </div>
+    <div class="wf-wrap" style="margin-bottom:1.5rem">
+      <div class="wf-flow">
+        <div class="wf-node trigger"><div class="wn-type" style="color:#5dd4b3">trigger</div><div class="wn-lbl">Form Input</div></div>
+        <div class="wf-edge"></div>
+        <div class="wf-node process"><div class="wn-type" style="color:#a89ff9">tool</div><div class="wn-lbl">Web Scraping</div></div>
+        <div class="wf-edge"></div>
+        <div class="wf-node process"><div class="wn-type" style="color:#a89ff9">ai</div><div class="wn-lbl">AI 요약</div></div>
+        <div class="wf-edge"></div>
+        <div class="wf-node logic"><div class="wn-type" style="color:#fbbf24">logic</div><div class="wn-lbl">If-Else</div></div>
+        <div class="wf-edge"></div>
+        <div class="wf-node output"><div class="wn-type" style="color:#f87171">output</div><div class="wn-lbl">결과 출력</div></div>
+      </div>
+      <div style="display:flex;gap:1.5rem;margin-top:1rem;flex-wrap:wrap">
+        <span style="font-size:.87rem;color:#5dd4b3">■ 트리거</span>
+        <span style="font-size:.87rem;color:#a89ff9">■ AI/도구 처리</span>
+        <span style="font-size:.87rem;color:#fbbf24">■ 로직 분기</span>
+        <span style="font-size:.87rem;color:#f87171">■ 출력</span>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+      <div style="padding:1.25rem 1.5rem;background:var(--s1);border:1px solid rgba(248,113,113,.2);border-radius:var(--rs)">
+        <div style="font-size:.88rem;font-weight:600;color:var(--acc3);margin-bottom:.5rem">If-Else 분기 예시</div>
+        <p style="font-size:.93rem">특정 날짜·키워드 포함 시 → <strong style="color:var(--t1)">긴급 보고</strong><br>그 외 → <strong style="color:var(--t1)">일반 요약</strong> 경로</p>
+      </div>
+      <div class="info-box info-amber" style="margin-top:0">
+        <div class="info-label il-amber">⚡ Execute 버튼의 마법</div>
+        <p style="font-size:.93rem">실행 시 노드 사이로 데이터가 흘러가는 것을 시각적으로 확인. 오류 발생 시 끊긴 부분을 즉시 추적해 수정하세요.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 16 GS 사례 -->
+<div class="slide glow-teal" data-idx="15">
+  <div class="content">
+    <div class="section-header">
+      <div class="eyebrow teal">실전 사례</div>
+      <h2>GS그룹 현장 적용 사례</h2>
+      <p class="lead">오늘의 작은 시작이 거대한 시스템이 됩니다.</p>
+    </div>
+    <div class="grid2">
+      <div class="ex-card"><span class="ex-tag tag-gs">GS 사례 01</span><h3>세무 법령 챗봇</h3><p>복잡한 세무 법령 문서를 Knowledge에 업로드하고, 자연어 질문만으로 정확한 조항과 출처를 즉시 조회합니다. 세무팀 대기 시간 90% 단축.</p><div class="ex-nodes"><span class="en">📚 Knowledge</span><span class="en">💬 Chat UI</span><span class="en">🔍 출처 추적</span></div></div>
+      <div class="ex-card"><span class="ex-tag tag-gs">GS 사례 02</span><h3>위험성 평가서 자동 작성</h3><p>현장 데이터와 안전 매뉴얼을 기반으로 위험성 평가서를 자동 작성하고, 팀장에게 공유까지 워크플로우로 자동화합니다.</p><div class="ex-nodes"><span class="en">📂 Knowledge</span><span class="en">✍️ AI 작성</span><span class="en">📤 자동 공유</span></div></div>
+      <div class="ex-card"><span class="ex-tag tag-idea">제안 사례</span><h3>계약서 버전 비교 자동화</h3><p>이전·신규 계약서 2개를 업로드하면 변경된 조항만 자동으로 골라내 비교 리포트를 생성합니다.</p><div class="ex-nodes"><span class="en">📄 PDF 비교</span><span class="en">🔄 차이 분석</span><span class="en">📋 변경 리포트</span></div></div>
+      <div class="ex-card"><span class="ex-tag tag-idea">제안 사례</span><h3>업계 뉴스레터 자동 발송</h3><p>매일 아침 업계 뉴스 수집 → AI 요약 → 팀 채널에 정해진 시간 자동 발송. 워크플로우 하나로 완결됩니다.</p><div class="ex-nodes"><span class="en">🔍 Web Search</span><span class="en">🤖 AI 요약</span><span class="en">📧 자동 발송</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 17 마무리 -->
+<div class="slide glow-purple" data-idx="16">
+  <div class="content center">
+    <div class="badge badge-purple">Make Innovation Simple &amp; Open</div>
+    <h1 style="font-size:clamp(2.8rem,6vw,4.4rem)">오늘,<br><span class="grad-text">AI 대리 한 명</span>과<br>함께 퇴근하세요</h1>
+    <p class="lead center" style="margin-top:.5rem">단순히 말만 잘하는 AI가 아니라, 실제로 내 일을 돕는<br>유능한 AI 직원을 여러분이 직접 만들었습니다.</p>
+    <div style="display:flex;gap:2.5rem;justify-content:center;margin-top:3rem;flex-wrap:wrap">
+      <div style="text-align:center">
+        <div style="font-size:2.6rem;margin-bottom:.6rem">🧠</div>
+        <div style="font-size:1rem;font-weight:600;color:var(--acc);margin-bottom:.25rem">Knowledge</div>
+        <div style="font-size:.9rem;color:var(--t3)">사내 데이터 → AI 기억</div>
+      </div>
+      <div style="display:flex;align-items:center;color:var(--t3);font-size:1.5rem;padding-bottom:1rem">+</div>
+      <div style="text-align:center">
+        <div style="font-size:2.6rem;margin-bottom:.6rem">🔧</div>
+        <div style="font-size:1rem;font-weight:600;color:var(--acc2);margin-bottom:.25rem">Tools</div>
+        <div style="font-size:.9rem;color:var(--t3)">기억 → 행동</div>
+      </div>
+      <div style="display:flex;align-items:center;color:var(--t3);font-size:1.5rem;padding-bottom:1rem">+</div>
+      <div style="text-align:center">
+        <div style="font-size:2.6rem;margin-bottom:.6rem">⚡</div>
+        <div style="font-size:1rem;font-weight:600;color:var(--acc4);margin-bottom:.25rem">Workflow</div>
+        <div style="font-size:.9rem;color:var(--t3)">행동 → 자동화</div>
+      </div>
+      <div style="display:flex;align-items:center;color:var(--t3);font-size:1.5rem;padding-bottom:1rem">=</div>
+      <div style="text-align:center">
+        <div style="font-size:2.6rem;margin-bottom:.6rem">🤖</div>
+        <div style="font-size:1rem;font-weight:600;color:var(--t1);margin-bottom:.25rem">AI 직원</div>
+        <div style="font-size:.9rem;color:var(--t3)">나만의 에이전트</div>
+      </div>
+    </div>
+    <div style="margin-top:3rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+      <a href="https://ekdp.miso.gs" style="display:inline-flex;align-items:center;gap:8px;background:var(--acc);color:white;padding:14px 36px;border-radius:40px;font-size:1.05rem;font-weight:600;text-decoration:none">MISO 바로가기 →</a>
+      <div style="display:inline-flex;align-items:center;gap:8px;background:var(--s1);border:1px solid var(--bdr);color:var(--t2);padding:14px 28px;border-radius:40px;font-size:1rem">ekdp.miso.gs</div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<div id="bottomnav">
+  <button class="nav-btn" id="prevBtn" onclick="navigate(-1)" disabled>←</button>
+  <div class="progress-bar"><div class="progress-fill" id="progFill"></div></div>
+  <div id="slide-dots"></div>
+  <button class="nav-btn" id="nextBtn" onclick="navigate(1)">→</button>
+</div>
+<div id="keyhint">← → 키보드 이동</div>
+
+<script>
+const slides=document.querySelectorAll('.slide');
+const total=slides.length;
+let cur=0;
+function buildDots(){
+  const d=document.getElementById('slide-dots');
+  for(let i=0;i<total;i++){
+    const dot=document.createElement('div');
+    dot.className='dot'+(i===0?' active':'');
+    dot.onclick=()=>goTo(i);
+    d.appendChild(dot);
+  }
+}
+function goTo(n){
+  const prev=cur;
+  slides[prev].classList.remove('active');
+  slides[prev].classList.add('exit');
+  setTimeout(()=>slides[prev].classList.remove('exit'),450);
+  cur=n;
+  slides[cur].classList.add('active');
+  updateUI();
+}
+function navigate(dir){
+  const next=cur+dir;
+  if(next<0||next>=total)return;
+  goTo(next);
+}
+function updateUI(){
+  document.getElementById('slide-counter').textContent=(cur+1)+' / '+total;
+  document.getElementById('progFill').style.width=((cur+1)/total*100)+'%';
+  document.getElementById('prevBtn').disabled=cur===0;
+  document.getElementById('nextBtn').disabled=cur===total-1;
+  document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===cur));
+}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' '){e.preventDefault();navigate(1);}
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp'){e.preventDefault();navigate(-1);}
+});
+buildDots();
+updateUI();
+</script>
+</body>
+</html>
