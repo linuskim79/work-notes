@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -105,7 +106,7 @@ p{font-size:clamp(1rem,1.6vw,1.1rem);color:var(--t2);line-height:1.7}
 .wn-type{font-size:.73rem;text-transform:uppercase;letter-spacing:.08em;color:var(--t3);margin-bottom:5px}
 .wn-lbl{font-size:1rem;font-weight:600;color:var(--t1)}
 .wf-edge{width:36px;height:1px;background:var(--bdr);flex-shrink:0;position:relative}
-.wf-edge::after{content:'&#9656;';position:absolute;right:-7px;top:-9px;font-size:12px;color:var(--t3)}
+.wf-edge::after{content:'▶';position:absolute;right:-7px;top:-9px;font-size:10px;color:var(--t3)}
 .core-card{background:var(--s1);border:1px solid var(--bdr);border-radius:var(--r);padding:2rem 1.75rem;position:relative;overflow:hidden}
 .core-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px}
 .core-card.k::before{background:linear-gradient(90deg,var(--acc),#9d96fc)}
@@ -348,14 +349,14 @@ hr{border:none;border-top:1px solid var(--bdr);margin:1.25rem 0}
   <div class="content">
     <div class="section-header">
       <div class="eyebrow amber">Session 2 — Tools 실습</div>
-      <h2>실시간 시장 분석 에이전트 만들기</h2>
-      <p class="lead">Web Search + Finance API를 장착해 즉시 보고서를 생성합니다.</p>
+      <h2>인사 규정 챗봇 만들기</h2>
+      <p class="lead">인사 규정 Knowledge + 이메일 발송 도구를 장착해 즉시 답변하고 메일까지 보냅니다.</p>
     </div>
     <div class="steps">
-      <div class="step"><div class="step-num">1</div><div><h4>페르소나(시스템 프롬프트) 설정</h4><p>"너는 데이터 기반의 금융 전문가야. 항상 최신 정보와 수치를 바탕으로 분석해줘."</p></div></div>
-      <div class="step"><div class="step-num">2</div><div><h4>도구 장착 — MCP 연결</h4><p>플레이그라운드 → Tool 탭 → Web Search, Finance API (MCP) 활성화</p></div></div>
-      <div class="step"><div class="step-num">3</div><div><h4>실행 테스트</h4><p>"삼성전자 최근 1주일 뉴스를 요약하고, 현재 주가와 함께 간략한 투자 전망 보고서를 써줘."</p></div></div>
-      <div class="step"><div class="step-num">4</div><div><h4>결과 확인 및 앱 배포</h4><p>AI가 도구를 자율 선택·실행하는 과정 확인 → 마음에 들면 즉시 앱으로 배포</p></div></div>
+      <div class="step"><div class="step-num">1</div><div><h4>페르소나(시스템 프롬프트) 설정</h4><p>"너는 회사 인사 규정 전문가야. 등록된 인사 규정 문서를 바탕으로 정확하게 답변하고, 필요 시 담당자에게 이메일로 안내해줘."</p></div></div>
+      <div class="step"><div class="step-num">2</div><div><h4>지식 + 도구 장착</h4><p>Knowledge 탭 → 인사 규정 문서 연결 / Tool 탭 → 이메일 발송 도구(MCP) 활성화</p></div></div>
+      <div class="step"><div class="step-num">3</div><div><h4>실행 테스트</h4><p>"출장비 항목에는 어떤 것들이 포함되나요? 관련 규정을 찾아서 알려줘."</p></div></div>
+      <div class="step"><div class="step-num">4</div><div><h4>결과 확인</h4><p>AI가 규정 내용을 답변한 뒤 이메일 발송까지 실행 → 실제 메일함에서 수신 여부 확인</p></div></div>
     </div>
   </div>
 </div>
@@ -403,8 +404,8 @@ hr{border:none;border-top:1px solid var(--bdr);margin:1.25rem 0}
   <div class="content">
     <div class="section-header">
       <div class="eyebrow coral">Session 3 — 워크플로우 실습</div>
-      <h2>식약처 공지 스크래핑 에이전트</h2>
-      <p class="lead">Form → Scraping → AI 요약 → If-Else 분기 → Output</p>
+      <h2>편의점 할인정보 스크래핑 에이전트</h2>
+      <p class="lead">Form → Scraping → AI 요약 → 파일 저장 → 이메일 발송</p>
     </div>
     <div class="wf-wrap" style="margin-bottom:1.5rem">
       <div class="wf-flow">
@@ -414,21 +415,20 @@ hr{border:none;border-top:1px solid var(--bdr);margin:1.25rem 0}
         <div class="wf-edge"></div>
         <div class="wf-node process"><div class="wn-type" style="color:#a89ff9">ai</div><div class="wn-lbl">AI 요약</div></div>
         <div class="wf-edge"></div>
-        <div class="wf-node logic"><div class="wn-type" style="color:#fbbf24">logic</div><div class="wn-lbl">If-Else</div></div>
+        <div class="wf-node output"><div class="wn-type" style="color:#f87171">output</div><div class="wn-lbl">파일 저장</div></div>
         <div class="wf-edge"></div>
-        <div class="wf-node output"><div class="wn-type" style="color:#f87171">output</div><div class="wn-lbl">결과 출력</div></div>
+        <div class="wf-node output"><div class="wn-type" style="color:#f87171">output</div><div class="wn-lbl">이메일 발송</div></div>
       </div>
       <div style="display:flex;gap:1.5rem;margin-top:1rem;flex-wrap:wrap">
         <span style="font-size:.87rem;color:#5dd4b3">■ 트리거</span>
         <span style="font-size:.87rem;color:#a89ff9">■ AI/도구 처리</span>
-        <span style="font-size:.87rem;color:#fbbf24">■ 로직 분기</span>
         <span style="font-size:.87rem;color:#f87171">■ 출력</span>
       </div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
       <div style="padding:1.25rem 1.5rem;background:var(--s1);border:1px solid rgba(248,113,113,.2);border-radius:var(--rs)">
-        <div style="font-size:.88rem;font-weight:600;color:var(--acc3);margin-bottom:.5rem">If-Else 분기 예시</div>
-        <p style="font-size:.93rem">특정 날짜·키워드 포함 시 → <strong style="color:var(--t1)">긴급 보고</strong><br>그 외 → <strong style="color:var(--t1)">일반 요약</strong> 경로</p>
+        <div style="font-size:.88rem;font-weight:600;color:var(--acc3);margin-bottom:.5rem">📋 실습 포인트</div>
+        <p style="font-size:.93rem">편의점 할인 페이지 URL을 Form으로 입력 → AI가 상품·가격·기간을 정리 → 결과를 파일로 저장하고 이메일로 자동 발송</p>
       </div>
       <div class="info-box info-amber" style="margin-top:0">
         <div class="info-label il-amber">⚡ Execute 버튼의 마법</div>
